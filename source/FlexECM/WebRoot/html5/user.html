@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户和组织机构管理</title>
+<link rel="StyleSheet" href="../css/common.css"  type="text/css">
+<script type="text/javascript" language="javascript" src="../js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="../js/util.js"></script>
+<script type="text/javascript" language="javascript" src="../js/user.js"></script>
+
+</head>
+<body>
+
+<div class="head">
+	<div class="logo">
+	</div>
+
+	<div class="oper">
+		<a class="head-btn cusr">
+			<img src="../img/spacer.gif"/>
+			增加用户
+		</a>
+		
+		<a class="head-btn cancel">
+			<img src="../img/spacer.gif"/>
+			取消
+		</a>
+		
+		<a class="head-btn yes user">
+			<img src="../img/spacer.gif"/>
+			保存
+		</a>
+	</div>
+</div>
+
+
+<div class="base">
+	<div class="left">
+		<ul class="navs">
+			<li class="person"><span class="repoico person"></span>我的资源库</li>
+			
+			<li class="person"><span class="repoico person"></span>公共资源库</li>
+			<li class="person"><span class="repoico person"></span>他人的分享</li>
+			
+			<li class="person"><span class="repoico person"></span>推荐</li>
+			<li class="person"><span class="repoico person"></span>资源分类</li>
+			
+		</ul>	
+	</div>
+	<div class="center">
+		
+		<div id="listing" >
+			<ul class="files list">
+				<li class="title xbreadcrumbs" >
+					<div class="check col">
+						<label></label>
+					</div>
+					<div class="ft col" >
+						<a href="javascript:void(0);" class="linkto">
+							<span class="name">用户名</span></a>
+					</div>
+					<div class="fs col">最近一次登录</div>
+				</li> 
+				<li class="file-template">
+					<div class="check col">
+						<label></label>
+					</div>
+					<div class="ft col">
+						<a href="javascript:void(0);" class="linkto">
+							<p class="ico"></p>
+							<span class="name">刘涵</span></a>
+					</div>
+					<div class="fs col">昨天</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div id="user-form" style="display:none">
+			
+			<table class="form">
+				
+				<tbody>
+				<tr>
+					<td colspan="2">
+						用户信息编辑
+					</td>
+				</tr>
+				
+				<tr>
+					<th>姓名：<span class="txt-impt">*</span>
+					</th>
+					<td>
+						<input type="text" id="nickname" maxlength="40">
+					</td>
+				</tr>
+				<tr>
+					<th>电话：</th>
+					<td><input type="text" id="mobile" maxlength="11"></td>
+				</tr>
+				<tr>
+					<th>
+						密码：
+						<span class="txt-impt">*</span>
+					</th>
+					<td>
+						<input type="text" id="password" maxlength="16">
+						<a id="autoGen" href="javascript:void(0);">自动生成</a>
+						<br>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						所属部门：
+						<span class="txt-impt" style="visibility: hidden">*</span>
+					</th>
+					<td>
+						<select name="u_id">
+							<option value="0">
+								不设置
+							</option>
+						</select>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>
+						个人资料库容量 
+					</th>
+					<td>
+						<input type="text" id="quota" value="10">G
+						<p><label class="checkbox"></label> <span id="unlimited">不限制容量</span></p>
+					</td> 
+				</tr>
+
+				<tr>
+					<th>
+						&nbsp;
+					</th>
+					<td>
+						<a class="head-btn yes user">
+							<img src="../img/spacer.gif"/>
+							保存
+						</a>
+					</td>
+				</tr></tbody>
+			</table>
+		</div>
+		
+	</div>
+	
+</div>
+
+</body>
+</html>
+
+
+</body>
+</html>

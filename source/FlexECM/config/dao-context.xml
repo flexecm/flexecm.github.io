@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="entityDao" class="com.ever365.ecm.entity.EntityDAOImpl" init-method="init">
+	    <property name="dataSource" ref="dataSource"></property>
+	    <property name="autoIncrementingHelper" ref="autoIncrementingHelper"></property>
+	    <property name="contentDAO" ref="contentDataDao"></property>
+	</bean>
+	<bean id="repositoryDao" class="com.ever365.ecm.repo.RepositoryDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="entityDAO" ref="entityDao"></property>
+	</bean>
+	<bean id="clipboardDao" class="com.ever365.ecm.clipboard.ClipboardDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="logDao" class="com.ever365.ecm.log.LogDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="aclDao" class="com.ever365.ecm.permission.AclDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="defaultGroups">
+      	<map>
+      		<entry key="Reader">
+      			<value>101,105</value>
+      		</entry>
+      		<entry key="Advance Reader">
+      			<value>101,102,103,104,105,106,107</value>
+      		</entry>
+      		<entry key="Submitter">
+      			<value>201,204,212</value>
+      		</entry>
+      	</map>
+      </property>
+	</bean>
+	
+	<bean id="contentDataDao" class="com.ever365.ecm.content.ContentDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="contentStoreDao" class=" com.ever365.ecm.content.ContentStoreDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="contentStoreFactory" ref="contentStoreFactory"></property>
+	</bean>
+	
+	<bean id="facetedDao" class="com.ever365.ecm.faceted.FacetedDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
+	<bean id="autoIncrementingHelper" class="com.ever365.mongo.AutoIncrementingHelper">
+  		<property name="dataSource" ref="dataSource"></property>
+  	</bean>
+	
+	
+	
+	<bean id="dataSource" class="com.ever365.mongo.LocalMongoDataSource">
+	    <property name="db">
+	    	<value>ecm</value>
+	    </property>
+	</bean>
+</beans>

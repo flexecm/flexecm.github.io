@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>manage</title>
+
+<script type="text/javascript" language="javascript" src="../js/jquery-1.7.2.min.js"></script>
+
+<style type="text/css">
+table td {
+border: 1px solid #ccc;
+}
+</style>
+
+<script type="text/javascript">
+
+
+$(document).ready(function() {
+	
+	$.getJSON("/service/repository/list/all", null, function(data) {
+
+		for ( var i = 0; i < data.length; i++) {
+			var tr = $("<tr>" + "</tr>");
+			
+			tr.append("<td>" + data[i].id + "</td>");
+			
+			tr.append("<td>" + data[i].owner + "</td>");
+			
+			var root = $("<td><a href='javascript:openNode(\"" + data[i].root + "\")'>root</a></td>");
+			
+			tr.append(root);
+			
+			var trash = $("<td><a href='javascript:openNode(\"" + data[i].trash + "\")'>trash</a></td>");
+			
+			tr.append(trash);
+			
+			$("#repos").append(tr);
+		}
+	});
+});
+
+function openNode(id) {
+	if (id==null) return;
+	
+	$("#properties tr").remove();
+	$("#children tr").remove();
+	
+	$.getJSON("/service/repository/entity/list", {
+		"id": id,
+		"skip": 0,
+		"limit": -1
+	}, function(data) {
+	
+		$("#parent").attr("href",  "javascript:openNode('" + data.pid + "')");
+		
+		for(var key in data) {
+			var tr = $("<tr></tr>");
+			tr.append("<td>" + key + "</td>");
+			tr.append("<td>" + data[key] + "</td>");
+			
+			$("#properties").append(tr);
+		}
+		
+		
+		for ( var i = 0; i < data.list.length; i++) {
+			var tr = $("<tr></tr>");
+			tr.append("<td><a href='javascript:openNode(\"" + data.list[i]._id + "\")'>" + data.list[i].name + "</a></td>");
+			
+			tr.append("<td><a href='javascript:removeNode(\"" + data.list[i]._id + "\")'>永久删除</a></td>");
+			
+			$("#children").append(tr);
+		}
+	});
+	
+}
+
+function removeNode(id) {
+	
+} 
+
+
+
+</script>
+</head>
+<body>
+
+<h1></h1>
+
+
+<h2>Repositories</h2>
+
+<table id="repos">
+
+</table>
+
+<h2><a id="parent" href="javascript:void(0)">Parent</a></h2>
+
+
+<h2>properties</h2>
+
+<table id="properties">
+	
+</table>
+
+
+<h2>permissions</h2>
+
+<table id="permissions">
+
+</table>
+
+
+<h2>children</h2>
+<table id="children">
+
+</table>
+
+
+</body>
+</html>

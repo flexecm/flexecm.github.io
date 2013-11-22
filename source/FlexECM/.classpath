@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="config"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.j2eedt.core.MYECLIPSE_JAVAEE_5_CONTAINER"/>
+	<classpathentry kind="lib" path="/3rd Party/lib-3.4d/servlet-api-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/json.jar" sourcepath="/3rd Party/src/json.zip"/>
+	<classpathentry kind="lib" path="lib/mongo-java-driver-2.11.1.jar"/>
+	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/spring-asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-support-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-web-3.0.5.RELEASE.jar" sourcepath="/3rd Party/src/org.springframework.web-sources-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/bcs-sdk-java_1.4.5.jar"/>
+	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
+</classpath>
