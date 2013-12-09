@@ -66,6 +66,11 @@ public interface Model {
 	public static final QName FACETED = QName.createQName(SYSTEM_NAMESPACE, "faceted");
 	
 	
-	
+	public static final QName PROP_ADMIN_EMAIL = QName.createQName(SYSTEM_NAMESPACE, "adminemail");
+	public static final QName PROP_ADMIN_EMAIL_OK = QName.createQName(SYSTEM_NAMESPACE, "adminemailok");
+	public static final QName PROP_ADMIN_SMTP = QName.createQName(SYSTEM_NAMESPACE, "smtp");
+	public static final QName PROP_ADMIN_PORT = QName.createQName(SYSTEM_NAMESPACE, "smtpport");
+	public static final QName PROP_ADMIN_SMTP_PASS = QName.createQName(SYSTEM_NAMESPACE, "smtppass");
+	public static final QName PROP_DEFAULT_STORE = QName.createQName(SYSTEM_NAMESPACE, "defaultstore");
 }
 

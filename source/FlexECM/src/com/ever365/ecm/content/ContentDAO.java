@@ -16,6 +16,9 @@ public interface ContentDAO {
 	void deleteContentData(String uuid);
 	  
 	String updateContentData(String uuid, String contentUrl, String mimetype, long size, String encoding);
-	  
+	
+	ContentData getContentData(String contentUrl);
+	
 	List<String> getNotUsed();
+	
 }

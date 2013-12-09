@@ -356,7 +356,7 @@ public class EntityDAOImpl implements EntityDAO {
 		properties.put(Model.PROP_ACL, null);
 		properties.put(Model.PROP_ACL_INHERIT, true);
 		properties.put(Model.PROP_ASSOC_TYPE, assocType.toString());
-		properties.put(Model.PROP_SEQ, this.autoIncrementingHelper.getNextSequence(ENTITIES));
+		//properties.put(Model.PROP_SEQ, this.autoIncrementingHelper.getNextSequence(ENTITIES));
 		
 		Date d = new Date();
 		properties.put(Model.PROP_CREATOR, AuthenticationUtil.getCurrentUser());
@@ -582,7 +582,7 @@ public class EntityDAOImpl implements EntityDAO {
 		
 		if (!src.getParentId().equals(target.getId())) {
 			setMap.put(getQNameKey(Model.PROP_PARENT_ID), new ObjectId(target.getId()));
-			setMap.put(getQNameKey(Model.PROP_SEQ), this.autoIncrementingHelper.getNextSequence(ENTITIES));
+			//setMap.put(getQNameKey(Model.PROP_SEQ), this.autoIncrementingHelper.getNextSequence(ENTITIES));
 		}
 		
 		if (!src.getRepository().equals(target.getRepository())) {
@@ -692,9 +692,9 @@ public class EntityDAOImpl implements EntityDAO {
 		DBObject dbo = new BasicDBObject();
 		
 		for (String key : filters.keySet()) {
-			if (key.equals(""))
-			
-			
+			if (key.equals("")) {
+				
+			}
 		}
 		
 		return null;

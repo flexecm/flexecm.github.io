@@ -13,7 +13,35 @@ public class ContentData {
 	private String encoding;
 	private String mimeType;
 	private String md5;
+	private Long lastModified;
+	private int length;
 	
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public Long getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(Long lastModified) {
+		this.lastModified = lastModified;
+	}
+
+	private String fileName;
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	private String contentUrl;
 
 	public ContentData(InputStream inputStream, String encoding,

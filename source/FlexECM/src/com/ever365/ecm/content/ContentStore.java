@@ -53,7 +53,6 @@ public interface ContentStore
     /**
      * Get the location where the store is rooted.  The format of the returned value will depend on the
      * specific implementation of the store.
-     * 
      * @return          Returns the store's root location or <b>.</b> if no information is available
      */
     public String getRootLocation();
@@ -108,7 +107,7 @@ public interface ContentStore
      * @param contentUrl
      * @return
      */
-    public ContentData getContentData(String contentUrl);
+    public InputStream getContentData(String contentUrl);
 
     /**
      * check weather the store match the store url;
@@ -125,6 +124,7 @@ public interface ContentStore
      * @return
      */
     public String getStoreUrl();
+    
     
     /**
      * @param inputStream

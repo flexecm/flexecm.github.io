@@ -22,7 +22,7 @@ public class ContentDAOImpl implements ContentDAO {
 	@Override
 	public String createContentData(String contentUrl, String mimetype,
 			long size, String encoding) {
-		DBCollection contents = getCotentCollection();
+		DBCollection contents = getContentCollection();
 		
 		DBObject dbo = new BasicDBObject();
 		String uuid = UUID.generate();
@@ -32,11 +32,12 @@ public class ContentDAOImpl implements ContentDAO {
 		dbo.put("size", size);
 		dbo.put("enc", encoding);
 		dbo.put("ref", 1);
+		dbo.put("modified", System.currentTimeMillis());
 		contents.insert(dbo);
 		return dbo.get("_id").toString();
 	}
 	
-	public DBCollection getCotentCollection() {
+	public DBCollection getContentCollection() {
 		DBCollection contents = dataSource.getCollection("contents");
 		return contents;
 	}
@@ -45,7 +46,7 @@ public class ContentDAOImpl implements ContentDAO {
 	public void copyContentData(String uuid) {
 		DBObject dbo = new BasicDBObject();
 		
-		DBCollection contents = getCotentCollection();
+		DBCollection contents = getContentCollection();
 		dbo.put("$inc", MapUtils.newMap("ref", 1));
 		
 		contents.update(new BasicDBObject("_id", new ObjectId(uuid)), dbo);
@@ -55,7 +56,7 @@ public class ContentDAOImpl implements ContentDAO {
 	public void deleteContentData(String uuid) {
 		DBObject dbo = new BasicDBObject();
 		
-		DBCollection contents = getCotentCollection();
+		DBCollection contents = getContentCollection();
 		dbo.put("$inc", MapUtils.newMap("ref", -1));
 		
 		contents.update(new BasicDBObject("_id", new ObjectId(uuid)), dbo);
@@ -69,6 +70,23 @@ public class ContentDAOImpl implements ContentDAO {
 
 	@Override
 	public List<String> getNotUsed() {
+		return null;
+	}
+
+	@Override
+	public ContentData getContentData(String id) {
+		DBObject dbo = new BasicDBObject();
+		dbo.put("_id", new ObjectId(id));
+		
+		DBObject contentdbo = getContentCollection().findOne(dbo);
+		if (contentdbo!=null) {
+			ContentData cd = new ContentData(null, (String)contentdbo.get("enc"), (String)contentdbo.get("mt"), 
+					(String)contentdbo.get("url"));
+			cd.setLength(((Long)contentdbo.get("size")).intValue());
+			cd.setLastModified((Long)contentdbo.get("modified"));
+			return cd;
+		}
+		
 		return null;
 	}
 

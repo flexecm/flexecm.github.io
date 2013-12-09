@@ -1,4 +1,5 @@
 var currentEntity = {};
+var currentUser ;
 var timer, delay = 500;
 
 $(document).ready(function(){
@@ -9,9 +10,15 @@ $(document).ready(function(){
 			eval($(t).data("event"));
 		});
 	});
-	
 	initUi();
 	initUploader();
+	pageMyRepo();
+});
+
+
+function initUi() {
+	$("div.oper").hide();
+	clear();
 	
 	$('#shareToFilter').bind('keydown blur change', function(e) {
 	    var _this = $(this);
@@ -20,12 +27,10 @@ $(document).ready(function(){
 	      onInputUserChange(_this.val());
 	    }, delay );
 	});
-});
-
-
-function initUi() {
-	$("div.oper").hide();
-	 clear();
+	
+	$.getJSON("/service/person/current", null, function(user) {
+		currentUser = user;
+	});
 }
 
 
@@ -51,9 +56,6 @@ function showButtons(role, selected) {
 		}
 	});
 }
-
-
-
 
 function onFileChecked() {
 	var files = getCheckedFiles();
@@ -390,104 +392,6 @@ function showConfirm() {
 	
 }
 
-
-var Dialog = {
-		initCMDialog: function(srcPaths,srcIds ,method, rememberlast) {
-			 //init the target dialog
-			 if ($("ul.tree li").length==0 || rememberlast==false) {
-				 $('ul.tree li').remove();
-				 $.getJSON("/service/repository/list", null, function(data){
-						for ( var i = 0; i < data.length; i++) {
-							Dialog.cm_append_folder_li($('ul.tree'), data[i].name, null, null, true, data[i].permission);
-						}
-					});
-			 }
-			 Dialog.show("cmdialog");
-
-			 //the cancel event
-			 attachEvent($(".cmdialog .buttons .cancel"), function() {
-					Dialog.hide();
-			 });
-			 
-			 attachEvent(".cmdialog .buttons .confirm", function() {
-				 if ($('ul.tree li>span.checked').length==0) {
-					 alert("请选择目标文件夹");
-					 return;
-				 }
-				 
-				 var parentli = $('ul.tree li>span.checked').parent();
-				 var repo = parentli.data("repo");
-				 var targetId = parentli.data("eid");
-				 
-				 /**Check to make sure the target folder is not child of current*/
-				 var path = "";
-				 while(!parentli.parent().hasClass("tree")) {
-					 path = "/" + parentli.find("span.name").html() + path;
-					 parentli = parentli.parent().parent();
-				 }
-				 //var checkedList = Listing.getChecked();
-				 var checkedList = srcPaths;
-				 if (repo==currentEntity.repo) {
-					 for ( var i = 0; i < checkedList.length; i++) {
-						 if (path.indexOf(checkedList[i])==0) {
-							 alert("不能将文件移动或复制到到自身或其子目录下");
-							 return;
-						 }
-					 }
-				 } 
-				 
-				 if (method=="move") {
-					 hideDialog();
-					 showMessage("正在移动...");
-					 $.post("/service/file/move", {
-						 srcRepo:  encodeURI(currentEntity.repo),
-						 srcPath: srcIds,
-						 targetRepo:  encodeURI(repo),
-						 targetPath: targetId
-					 }, function () {
-						 showMessage("移动完成");
-						 Listing.refresh();
-					 });
-				 } else if (method=="copy") {
-					 hideDialog();
-					 showMessage("正在复制...");
-					 $.post("/service/file/copy", {
-						 srcRepo:  encodeURI(currentEntity.repo),
-						 srcPath: srcIds,
-						 targetRepo:  encodeURI(repo),
-						 targetPath: targetId
-					 }, function () {
-						 showMessage("复制完成");
-						 Listing.refresh();
-					 });
-				 }
-			 });
-			 
-			 attachEvent(".cmdialog .buttons .newfd", function() {
-			 });
-			 
-			 if (method=="move") {
-				 $("div.dir-dialog div.title").html("移动到");
-			 } else if (method=="copy") {
-				 $("div.dir-dialog div.title").html("复制到");
-			 }
-		},
-		
-		
-		/**
-		 * attach one folder item to the select-target-folder-dialog 
-		 * @param parentul  the parent folder ul
-		 * @param repo        folder entity repository 
-		 * @param id            folder entity id
-		 * @param name      folder entity id
-		 * @param plus        has child folders
-		 * @param permission folder entity permissions
-		 */
-		cm_append_folder_li: function(parentul, repo, id, name, plus, permission) {
-				
-		}
-};
-
 function closeRight(div) {
 	$(".base .right").css("right", -400);
 	$(".base .center").css("right", 0);
@@ -522,7 +426,7 @@ function addFolderDialog() {
 
 function listTrashFiles() {
 	$.getJSON("/service/entity/trash/list", {
-		"repo": currentEntity.repo 
+		"repo": encodeURI(currentEntity.repo) 
 	}, function(data) {
 		$("#trashlist").data("repo", currentEntity.repo);
 		$("#trashlist li.trashItem").remove();
@@ -703,7 +607,6 @@ function sort(list, sortby) {
 
 var currentSortBy = null;
 
-
 function listFolder(id,msg) {
 	if (msg) {
 		showMessage(msg + ", 正在加载文件列表");
@@ -721,11 +624,13 @@ function listFolder(id,msg) {
 			hideMessage();
 		}
 		currentEntity = result;
+		/*
 		if (result.root) {
 			$("#listing ul.list li.title div.ft").hide();
 		} else {
 			$("#listing ul.list li.title div.ft").show();
 		}
+		*/
 		
 		addCrumb(result.name, result._id, result.root);
 		var list = result.list;
@@ -760,8 +665,11 @@ function listFolder(id,msg) {
 					listFolder(data._id);
 				});
 			} else {
-				var endfix = Utils.getFileExt(entity.name);
-				cloned.find("p.ico").addClass(endfix);
+				cloned.find("p.ico").addClass(entity.ext);
+				attachEvent(cloned.find("span.name"), function(t) {
+					var data = $(t).parent().parent().parent().data("entity");
+					window.open("/service/file/download?id=" + data._id);
+				});
 			}
 			attachEvent(cloned, toggleFileChecked);
 			$("#listing ul.files").append(cloned);
@@ -776,6 +684,13 @@ function refreshFolder(msg) {
 
 function parent() {
 	listFolder(currentEntity.pid);
+}
+
+function listFolderByPath(file) {
+	$(".base .center>div").hide();
+	$("#listing").show();
+	$("#fpath li.crumb").remove();
+	listFolder(file._id);
 }
 
 function selectAll(t) {
@@ -849,8 +764,13 @@ function addCrumb(name, id, isRoot) {
 function openRepo(repoData) {
 	$(".base .center>div").hide();
 	$("#listing").show();
-	listFolder(repoData.root);
+	if (repoData==null) {
+		listFolder(null);
+	} else {
+		listFolder(repoData.root);
+	}
 }
+
 function pageMyRepo() {
 	$(".base .center>div").hide();
 	$("#listing").show();
@@ -877,7 +797,7 @@ function pagePublic() {
 function pageShares() {
 	clear();
 	$("#share-list").show();
-	
+	/*
 	$.getJSON("/service/share/mine", null, function(list) {
 		$("#my-share li.snapshot").remove();
 		for ( var i = 0; i < list.length; i++) {
@@ -885,7 +805,7 @@ function pageShares() {
 			$("#my-share").append(fileSnapshot(file));
 		}
 	});
-	
+	*/
 	$.getJSON("/service/share/received", null, function(list) {
 		$("#share-me li.snapshot").remove();
 		for ( var i = 0; i < list.length; i++) {
@@ -894,7 +814,6 @@ function pageShares() {
 		}
 	});
 }
-
 
 function fileSnapshot(file) {
 	var cloned = $("li.share.template").clone();
@@ -925,12 +844,22 @@ function fileSnapshot(file) {
 			cloned.find("div.list ul").append("<li>没有文件</li>");
 		} 
 	} else {
-		cloned.find(".title img").addClass(Utils.getFileExt(file.name));
+		cloned.find(".title img").addClass(file.ext);
+		cloned.find("div.list ul").append("<li></li>");
 	}
-	
-	cloned.find("span.time").html(Utils.formatTime(file.modified));
-	cloned.find(".owner").html(file.owner);
-	
+	cloned.find("span.time").html(file.owner);
+	/*
+	if (file.owner==currentUser.name) {
+		cloned.find(".owner").html(file.permissions.length);
+	} else {
+	}
+	*/
+	cloned.find(".owner").html("进入");
+	cloned.find(".owner").data("file", file);
+	attachEvent(cloned.find(".owner"), function(e) {
+		var file = $(e).data('file');
+		listFolderByPath(file);
+	}) ;
 	return cloned;
 }
 
@@ -1234,7 +1163,6 @@ function confirmShare() {
 		"inherit": $("#share-inherit").hasClass("checked"),
 		"aces": JSON.stringify(acelist)
 	}, function() {
-		
 	});
 }
 
@@ -1254,4 +1182,22 @@ function showMessage(m, h) {
 
 function hideMessage() {
 	$("#msg").slideUp();
+}
+
+function newRepo() {
+	clear();
+	$("#repo-edit-view").show();
+	
+	$("#repo-edit-view .shadow-box").hide();
+	$("#repo-edit-view .new").show();
+}
+
+function confirmRepoName() {
+	
+	$.post("/service/repo/add", {
+		'title': $("repo-name").val(),
+		'desc': $("repo-desc").val()
+	}, function() {
+		pagePublic();
+	});
 }

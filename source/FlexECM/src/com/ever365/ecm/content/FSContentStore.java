@@ -1,6 +1,8 @@
 package com.ever365.ecm.content;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +25,23 @@ public class FSContentStore implements ContentStore {
 	private String rootDir;
 	private File rootDirectory = null;
 	
+	public static boolean checkRootDir(String path) {
+		File root = new File(path);
+		if (root.exists()) {
+			if (root.listFiles().length>0) {
+				return false;
+			}
+			return true;
+		} else {
+			try {
+				return root.mkdirs();
+			} catch (Exception e) {
+				return false;
+			}
+		}
+	}
+	
+	
 	public void setRootDir(String rootDir) {
 		this.rootDir = rootDir;
 	}
@@ -39,7 +58,7 @@ public class FSContentStore implements ContentStore {
             {
                 throw new RuntimeException();
             }
-        }		
+        }
 	}
 	
 	@Override
@@ -65,6 +84,13 @@ public class FSContentStore implements ContentStore {
 			e.printStackTrace();
 		}
         return null;
+	}
+	
+
+	@Override
+	public String putContent(String contentId, InputStream inputStream,
+			long offset, long length) {
+		return null;
 	}
 
 	 public static String createNewFileStoreUrl() {
@@ -147,8 +173,7 @@ public class FSContentStore implements ContentStore {
 	
 	@Override
 	public String getRootLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		return rootDirectory.getAbsolutePath();
 	}
 	
 	@Override
@@ -167,7 +192,13 @@ public class FSContentStore implements ContentStore {
 	}
 	
 	@Override
-	public ContentData getContentData(String contentUrl) {
+	public InputStream getContentData(String contentUrl) {
+		File file = new File(this.rootDirectory, contentUrl);
+		if (!file.exists()) return null;
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+		}
 		return null;
 	}
 	
@@ -182,14 +213,12 @@ public class FSContentStore implements ContentStore {
 	}
 
 	@Override
-	public String putContent(String contentId, InputStream inputStream,
-			long offset, long length) {
-		return null;
-	}
-
-	@Override
 	public void setContentUrl(String storeUrl) {
-		this.rootDir =  storeUrl.substring(PROTOCOL.length());
+		if (storeUrl.startsWith(PROTOCOL)) {
+			this.rootDir = storeUrl.substring(PROTOCOL.length());
+		} else {
+			this.rootDir = storeUrl;
+		}
 		init();
 	}
 

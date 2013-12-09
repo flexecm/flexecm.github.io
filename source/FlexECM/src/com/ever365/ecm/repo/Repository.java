@@ -12,17 +12,14 @@ import com.ever365.ecm.entity.Entity;
 public final class Repository implements Serializable
 {
     private static final long serialVersionUID = 3905808565129394486L;
-
-    public static final String PROTOCOL_FS = "fs";
-    public static final String PROTOCOL_ARCHIVE = "archive";
-    public static final String PROTOCOL_VERSION = "version";
-    public static final String PROTOCOL_DELETED = "deleted";
-    public static final String PROTOCOL_PERSON = "person";
-    public static final String PROTOCOL_FLAT = "flat";
     
-    public static final Repository REPO_DEFAULT = new Repository(PROTOCOL_FS, "SpacesStore");
     
     public static final String URI_FILLER = "://";
+    public static final String PROTOCOL_USR = "usr";
+    public static final String PROTOCOL_PUB = "pub";
+    public static final String REPOSITORY_DEFAULT = "pub://default";
+    public static final String REPOSITORY_PERSON = "person://all";
+    
 
     private String id;
     private final String protocol;

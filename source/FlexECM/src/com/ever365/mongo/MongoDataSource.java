@@ -13,4 +13,5 @@ public interface MongoDataSource {
 	
 	public DBCollection getCollection(String dbName, String collName);
 	
+	public void clean();
 }

@@ -10,7 +10,6 @@ import java.util.List;
 public class AuthenticationUtil
 {
 	public static String EMPTY_TENANT = "default";
-	public static String ADMIN = "admin";
 	public static String SYSTEM = "system";
 	
     private static ThreadLocal<String> currentUser = new ThreadLocal<String>();
@@ -38,7 +37,7 @@ public class AuthenticationUtil
     
 	public static void setCurrentUser(String user) {
 		currentUser.set(user);
-		if (ADMIN.equals(user)) {
+		if (PersonService.ADMIN.equals(user)) {
 			setRunAsAdmin();
 		}
     }

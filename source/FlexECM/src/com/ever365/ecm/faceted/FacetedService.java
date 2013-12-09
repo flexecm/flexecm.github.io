@@ -57,9 +57,6 @@ public class FacetedService {
 		filter.put("type", Model.TYPE_FILE.toString());
 		
 		entityDAO.filter(filter);
-		
-		
-		
 		return null;
 	}
 	

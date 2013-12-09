@@ -81,8 +81,7 @@ public class BCSContentStore implements ContentStore {
 		return false;
 	}
 	@Override
-	public ContentData getContentData(String contentUrl) {
-		// TODO Auto-generated method stub
+	public InputStream getContentData(String contentUrl) {
 		return null;
 	}
 	@Override

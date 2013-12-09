@@ -12,6 +12,7 @@ import com.mongodb.DBObject;
 public class AutoIncrementingHelper {
 	
 	private MongoDataSource dataSource;
+	private Long x = 1L;
 	
 	private Map<String, Integer> incMap = MapUtils.newMap("seq", 1);
 	
@@ -25,10 +26,14 @@ public class AutoIncrementingHelper {
 			dbo.put("_id", name);
 			dbo.put("seq", 0L);
 			dataSource.getCollection("counters").insert(dbo);
+			x = 0L;
 		}
 	}
 	
 	public Long getNextSequence(String name) {
+		x++;
+		return x;
+		/*
 		BasicDBObject query = new BasicDBObject("_id", name);
 		DBObject update = new BasicDBObject();
 		update.put("$inc", incMap);
@@ -36,6 +41,7 @@ public class AutoIncrementingHelper {
 		DBObject dbo = dataSource.getCollection("counters").findAndModify(query, update);
 		
 		return (Long) dbo.get("seq");
+		*/
 	}
 	
 }

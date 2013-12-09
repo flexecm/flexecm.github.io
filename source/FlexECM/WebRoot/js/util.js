@@ -132,6 +132,11 @@ var Utils = {
 			return result;
 		},
 		
+		isEmail: function(str) {
+			var myRegExp = /[a-z0-9-]{1,30}@[a-z0-9-]{1,65}.[a-z]{3}/ ;
+			return myRegExp.test(str);
+		},
+		
 		//生成一个10位的随机密码
 		genPass: function() {
 			var x="123456789poiuytrewqasdfghjklmnbvcxzQWERTYUIPLKJHGFDSAZXCVBNM";
@@ -144,3 +149,86 @@ var Utils = {
 		 	return tmp;
 		}
 };
+
+function initUi() {
+	/*
+	attachEvent($("ul.navs li"), function(t) {
+		$("ul.navs li").removeClass("current");
+		$(t).addClass("current");
+		clear();
+		$("#" + $(t).attr("target")).show();
+	});
+	*/
+	$("div.oper").hide();
+	clear();
+}
+
+function clear() {
+	hideMessage();
+	hideDialog();
+	$(".base .center>div").hide();
+	$("div.head div.oper").hide();
+}
+
+function hideMessage() {
+	$("#msg").slideUp();
+}
+
+function hideDialog(dialogname) {
+	$("div.hide-bg").hide();
+	if (dialogname==null) {
+		$("div.dialog").hide();
+	} else {
+		$("#" + dialogname).hide();
+	}
+}
+
+function showDialog(dialogname) {
+	closeDialog();
+	$("div.hide-bg").show();
+	var left = ($(window).width() - parseInt($("#" + dialogname).css("width")))/2;
+	var top = ($(window).height() - parseInt($("#" + dialogname).css("height")))/2;
+	$("#" + dialogname).css("left", left);
+	$("#" + dialogname).css("top", top);
+	$("#" + dialogname).show();
+}
+
+function closeDialog() {
+	$("div.hide-bg").hide();
+	$(".dialog").fadeOut("fast");
+}
+
+function showPenddingMsg(text) {
+	showDialog("pendding-dialog");
+	$("#pendding-dialog div.content").html(text);
+}
+
+function showAlert(text, func) {
+	showDialog("alert-dialog");
+	$("#alert-dialog div.content").html(text);
+	
+	attachEvent($("#alert-dialog a.button"), function() {
+		closeDialog();
+		if (func!=null) {
+			func();
+		}
+	});
+}
+
+function logout() {
+	location.href = "/logout";
+}
+
+function showMessage(m, h) {
+	if (typeof m === 'string') {
+		$("#msg").html(m);
+	} else {
+		$("#msg").html("");
+		$("#msg").append(m);
+	}
+
+	$("#msg").show();
+	if (h) {
+		setTimeout("hideMessage()", h);
+	}
+}

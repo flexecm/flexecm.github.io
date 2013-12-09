@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ever365.ecm.authority.AuthenticationUtil;
+import com.ever365.ecm.authority.PersonService;
 import com.ever365.ecm.entity.Entity;
 import com.ever365.ecm.entity.EntityDAO;
 import com.ever365.ecm.repo.Model;
@@ -36,8 +37,14 @@ public class PermissionService {
 	public void setAclDAO(AclDAO aclDAO) {
 		this.aclDAO = aclDAO;
 	}
-	
-	
+
+	public boolean isAdmin(String user) {
+		if (PersonService.ADMIN.equals(user)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	/**
 	 * Get the permission which take effect
 	 * @param entity

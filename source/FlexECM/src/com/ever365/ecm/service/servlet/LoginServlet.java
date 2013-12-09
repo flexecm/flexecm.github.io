@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.ContextLoaderListener;
 
 import com.ever365.ecm.authority.PersonService;
+import com.ever365.ecm.service.ConfigService;
 
 public class LoginServlet extends HttpServlet {
 
@@ -37,7 +38,6 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
 		String name = req.getParameter("name");
 		String password = req.getParameter("password");
 				
@@ -47,9 +47,15 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		boolean checked = personService.checkPassword(name, password);
-		
+
 		if (checked) {
 			req.getSession().setAttribute(SESSION_USER, name);
+			
+			if (name.equals(PersonService.ADMIN)) {
+				resp.sendRedirect("/admin/home.html");
+				return;
+			}
+			
 			resp.sendRedirect(logonPage);
 		} else {
 			resp.sendRedirect(loginPage + "?user and password mismatch");

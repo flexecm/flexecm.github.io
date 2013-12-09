@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 
 import com.ever365.ecm.authority.AuthenticationUtil;
+import com.ever365.ecm.authority.PersonService;
 import com.ever365.ecm.entity.Entity;
 import com.ever365.ecm.entity.EntityDAO;
 import com.ever365.mongo.MongoDataSource;
@@ -116,7 +117,7 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		
 		if (found==null) {
 			if (autoCreate) {
-				return addRepository(name, AuthenticationUtil.ADMIN, null);
+				return addRepository(name, PersonService.ADMIN, null);
 			} else {
 				return null;
 			}
@@ -155,6 +156,17 @@ public class RepositoryDAOImpl implements RepositoryDAO {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public void dropRepository(String repository) {
+		DBCollection repoColl = dataSource.getCollection(REPOSITORIES);
+		DBObject dbo = new BasicDBObject();
+		Repository r = new Repository(repository);
+		dbo.put("tenant", AuthenticationUtil.getTenant());
+		dbo.put("p", r.getProtocol());
+		dbo.put("name", r.getIdentifier());
+		repoColl.remove(dbo);
 	}
 
 }

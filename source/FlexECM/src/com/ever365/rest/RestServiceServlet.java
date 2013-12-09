@@ -2,6 +2,7 @@ package com.ever365.rest;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +23,11 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.context.ContextLoaderListener;
+
+import com.ever365.ecm.authority.AuthenticationUtil;
+import com.ever365.ecm.content.ContentData;
 
 /**
  * Servlet implementation class RestServiceServlet
@@ -64,6 +69,16 @@ public class RestServiceServlet extends HttpServlet {
 			strPath = strPath.substring( rootPos + servletPath.length());
 		
 		MethodInvocation handler = registry.getGet(strPath);
+		
+		if (handler==null) {
+			response.setStatus(404);
+			return;
+		}
+		
+		if (handler.isRunAsAdmin() && !AuthenticationUtil.isAdmin()) {
+			throw new HttpStatusException(HttpStatus.FORBIDDEN);
+		}
+		
 		Enumeration paramNames = request.getParameterNames();
 		Map<String, Object> args = new HashMap<String, Object>();
 		while (paramNames.hasMoreElements()) {
@@ -71,20 +86,16 @@ public class RestServiceServlet extends HttpServlet {
 			args.put(name, URLDecoder.decode(request.getParameter(name), "UTF-8"));
 		}
 		
-		if (handler==null) {
-			response.setStatus(404);
-			return;
-		}
 		try {
 			Object result = handler.execute(args);
-			render(response, result);
+			render(request, response, result);
 		} catch (Exception e) {
 			if (e instanceof HttpStatusException) {
 				response.sendError(((HttpStatusException)e).getCode(), ((HttpStatusException)e).getDescription());
 			} else {
 				try {
 					Object result = handler.execute(args);
-					render(response, result);
+					render(request, response, result);
 				} catch (Exception ex) {
 					e.printStackTrace(response.getWriter());
 					response.setStatus(500);
@@ -115,10 +126,14 @@ public class RestServiceServlet extends HttpServlet {
 				strPath = strPath.substring( rootPos + servletPath.length());
 
 			MethodInvocation handler = registry.getPost(strPath);
-
+			
 			if (handler==null) {
 				response.setStatus(404);
 				return;
+			}
+			
+			if (handler.isRunAsAdmin() && !AuthenticationUtil.isAdmin()) {
+				throw new HttpStatusException(HttpStatus.FORBIDDEN);
 			}
 
 			Map<String, Object> args = new HashMap<String, Object>();
@@ -166,12 +181,12 @@ public class RestServiceServlet extends HttpServlet {
 					}
 				}
 			}
-
-			Object result = handler.execute(args);
+			
+ 			Object result = handler.execute(args);
 			if (result==null) {
 				response.setStatus(200);
 			} else {
-				render(response, result);
+				render(request, response, result);
 			}
 		} catch (Exception e) {
 			if (e instanceof HttpStatusException) {
@@ -201,24 +216,78 @@ public class RestServiceServlet extends HttpServlet {
 		return sb.toString();
 	}
 
-	private void render(HttpServletResponse response, Object result)
+	private void render(HttpServletRequest request, HttpServletResponse response, Object result)
 			throws IOException {
 		if (result==null) {
 			response.setStatus(201);
 			return;
 		}
-		response.setContentType(CONTENT_TYPE);
-		PrintWriter pw = response.getWriter();
-		if (result instanceof Collection) {
-			JSONArray ja = new JSONArray((Collection) result);
-			pw.print(ja.toString());
-		} else if (result instanceof Map){
-			JSONObject jo = new JSONObject((Map) result);
-			pw.print(jo.toString());
+		
+		if (result instanceof ContentData) {
+			handleFileDownload(request, response, result);
 		} else {
-			pw.print(result.toString());
+			response.setContentType(CONTENT_TYPE);
+			PrintWriter pw = response.getWriter();
+			if (result instanceof Collection) {
+				JSONArray ja = new JSONArray((Collection) result);
+				pw.print(ja.toString());
+			} else if (result instanceof Map){
+				JSONObject jo = new JSONObject((Map) result);
+				pw.print(jo.toString());
+			} else {
+				pw.print(result.toString());
+			}
+			pw.close();
 		}
-		pw.close();
+		
+	}
+
+	public void handleFileDownload(HttpServletRequest request,
+			HttpServletResponse response, Object result)
+			throws UnsupportedEncodingException, IOException {
+		ContentData contentData = (ContentData)result; 
+		
+		long modifiedSince = request.getDateHeader("If-Modified-Since");
+		if (modifiedSince>0L) {
+			if (contentData.getLastModified()<=modifiedSince) {
+				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+				return;
+			}
+		} else {
+			response.setDateHeader("Last-Modified", contentData.getLastModified());
+			response.setHeader("Cache-Control", "must-revalidate");
+			response.setHeader("ETag", "\"" + contentData.getMd5() + "\"");
+		}
+		
+		String fileDwnName = new String(contentData.getFileName().getBytes("UTF-8"), "ISO-8859-1");
+
+		String userAgent = request.getHeader("User-Agent");
+		if (userAgent!=null && userAgent.contains("MSIE")) {
+			fileDwnName = new String(fileDwnName.getBytes("gb2312"), "ISO8859-1");
+		}
+		
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileDwnName + "\";");
+		
+		response.setHeader("Accept-Ranges", "bytes");
+		
+		//断点下载处理
+		String range = request.getHeader("Content-Range");
+		if (range == null) {
+			range = request.getHeader("Range");
+		}
+		if (range != null)  {
+			
+		}
+		
+		response.setContentType(contentData.getMimeType());
+		int size = contentData.getLength();
+		response.setHeader("Content-Range", "bytes 0-"
+				+ Long.toString(size - 1L) + "/"
+				+ Long.toString(size));
+		response.setContentLength(size);
+		response.setHeader("Content-Length", Integer.toString(size));
+		
+		FileCopyUtils.copy(contentData.getInputStream(), response.getOutputStream());
 	}
 
 }

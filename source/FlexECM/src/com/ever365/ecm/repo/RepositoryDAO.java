@@ -36,4 +36,6 @@ public interface RepositoryDAO {
      */
     public Repository addRepository(String repository, String owner, String contentStore);
     
+    public void dropRepository(String repository);
+    
 }

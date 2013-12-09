@@ -3,6 +3,7 @@ package com.ever365.mongo;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -97,6 +98,15 @@ public class LocalMongoDataSource implements MongoDataSource {
 			}
 		}
 		return dbconnections.get(dbName).getCollection(collName);
+	}
+
+	@Override
+	public void clean() {
+		Set<String> allcollections = dbconnections.get(db).getCollectionNames();
+		for (String collection : allcollections) {
+			if (collection.startsWith("system.")) continue;
+			getCollection(collection).drop();
+		}
 	}
 
 }

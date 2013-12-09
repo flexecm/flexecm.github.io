@@ -191,6 +191,7 @@ public class MethodInvocation {
 			return Boolean.valueOf((String)obj);
 		}
 		
+		System.out.println("clazz=" + clazz + "  obj=" + obj);
 		
 		throw new HttpStatusException(HttpStatus.BAD_REQUEST);
 	}

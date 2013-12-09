@@ -22,7 +22,6 @@ a {
 	text-decoration: none;
 	cursor: pointer;
 }
-input,textarea{padding:0;margin:0;border:none;outline:none;}
 img{border:none;}
 table{border-collapse:collapse;border-spacing:0;}
 table td{padding:0;}
@@ -33,6 +32,10 @@ a:HOVER {
 
 a.pressed {
 	color: #08A3D9;
+}
+
+.w360 {
+	width: 360px;
 }
 
 
@@ -46,6 +49,9 @@ a.pressed {
 
 .h320 {
 	height: 320px;
+}
+.h120 {
+	height: 120px;
 }
 
 .pad5 {
@@ -62,6 +68,37 @@ a.pressed {
 
 ul, ol {
 	list-style: none;
+}
+
+.contentbtn {
+	display: inline-block;
+	padding: 7px 15px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #333;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.9);
+	white-space: nowrap;
+	background-color: #eaeaea;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+	border-bottom-color: #c5c5c5;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.contentbtn:hover {
+	text-decoration: none;
+	background-color: #dadada;
+	color: #444;
+}
+
+.rawbtn {
+	color:#699BB9;
+	padding: 5px;
+	cursor: pointer;
+}
+.rawbtn:hover {
+	background-color: #699BB9;
+	color: white;
 }
 
 a.icon-action {
@@ -138,6 +175,9 @@ input[type="checkbox"]+label {
 	background-position: -1px -270px;
 }
 
+.ico-tag {
+	background-position: -1px -444px;
+}
 
 .ico-clipboard {
 	background-position: 0px -210px;
@@ -163,7 +203,7 @@ table.form td {
 	padding: 5px;
 }
 
-input {
+input, textarea {
 	padding: 5px;
 }
 
@@ -348,6 +388,13 @@ a.button.blue {
 	color: #fff!important;
 }
 
+.head .links a {
+	line-height: 35px;
+	margin-right: 10px;
+	color: white;
+}
+
+
 .base {
 	top: 40px;
 	width: auto;
@@ -452,22 +499,19 @@ a.button.blue {
 
 .repoico.home {
 	background-position: -30px -32px;
-}
+}	
 
 .current .repoico.home {
 	background-position: -63px -32px;
 }
 
-
 .repoico.share {
 	background-position: -30px 2px;
-	
 }
 
 .current  .repoico.share {
 	background-position: -63px 2px;
 }
-
 
 .repoico.facet {
 	background-position: -30px -69px;
@@ -480,6 +524,10 @@ a.button.blue {
 }
 .current .repoico.public {
 	background-position: -65px -116px;
+}
+
+.repoico.step1 {
+	background-position: -29px -150px;
 }
 
 .head {
@@ -510,23 +558,20 @@ a.button.blue {
 .head-btn {
 	position: relative;
 	display: inline-block;
-	padding: 4px 8px 4px 25px;
+	padding: 8px 8px 8px 25px;
 	font-size: 14px;
 	color: #333;
 	white-space: nowrap;
-	background-color: #eaeaea;
-	border: 1px solid #ddd;
-	border-bottom-color: #c5c5c5;
+	background-color: #e3edf9;
+	border: 1px solid #bdd5ee;
 	vertical-align: middle;
 	cursor: pointer;
 }
 
-
 .head-btn:HOVER {
-	color: #333;
+	color: #444;
 	text-decoration: none;
-	background-color: #dadada;
-	border-color: #ccc #ccc #b5b5b5;
+	background-color: #DCE6F0;
 }
 
 .head-btn.pressed {
@@ -536,7 +581,7 @@ a.button.blue {
 }
 
 .head-btn.disabled {
-	opacity: .5;
+	display:none;
 	color: #666;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
 	background-image: none;
@@ -555,7 +600,7 @@ a.button.blue {
 	cursor: default;
 	position: absolute;
 	left: 5px;
-	top: 5px;
+	top: 8px;
 }
 
 .head .oper ul.v_f li {
@@ -851,7 +896,7 @@ ul.files.list li.item  p.ico span.slot.shared {
 .wma, .avi, .rmvb, .mp4, .3gp {
 	background-position: -224px -80px;
 }
-.zip, .rar, .7z, .tar, .war {
+.zip, .rar, .tar, .war {
 	background-position: -352px -80px;
 }
 .pdf {
@@ -1075,23 +1120,21 @@ div.title span{
 } 
 
 
-
 li.snapshot {
 	display: inline-block;
-	background-color: #fff;
-	border: 1px solid #bebec4\0;
-	color: #666;
-	font-size: 12px;
-	margin: 15px 0 0 13px;
+	background-color: #eee;
+	margin: 15px 0px 10px 13px;
 	width: 388px;
-	box-shadow: 0 1px 3px rgba(0,0,0,.3);
 	text-align: left;
 	list-style-type: none;
+	padding: 3px;
 }
 
 li.snapshot div.header {
-	margin: 10px;
 	line-height: 14px;
+	border: 1px solid #d8d8d8;
+	border-bottom: none;
+	background: white;
 }
 
 li.snapshot div.header a {
@@ -1100,15 +1143,17 @@ li.snapshot div.header a {
 	color: #3d3d3d;
 	word-wrap: break-word;
 	word-break: break-all;
-	line-height: 16px;
+	line-height: 36px;
+	margin: 10px;
 }
 li.snapshot a img {
 	margin-right: 5px;
 }
 
 li.snapshot div.list {
-	width: 100%;
 	height: 95px;
+	border: 1px solid #d8d8d8;
+	
 }
 
 li.snapshot div.list  ul {
@@ -1137,7 +1182,8 @@ li.snapshot div.list  ul li img{
 
 
 li.snapshot div.foot {
-	border-top: 1px solid #f3f3f3;
+	border: 1px solid #d8d8d8;
+	border-top:none;
 	padding:8px;
 	background: #f7f6f9;
 }
@@ -1148,7 +1194,6 @@ li.snapshot div.foot .cont {
 div.center div.title {
 	border-bottom: 1px solid #d3d8db;
 	background: #f8f8f8;
-	background: -webkit-linear-gradient(top, #fcfcfc, #f8f8f8);
 	font-size: 15px;
 	padding: 8px;
 }
@@ -1202,6 +1247,9 @@ dl.faceted-filter dd {
 	position: relative;
 	overflow: hidden;
 }
+dl.faceted-filter dd.text {
+	line-height: 26px;
+}
 
 dl.faceted-filter dd div {
 	float: left;
@@ -1224,31 +1272,29 @@ dl.faceted-filter dd div.selected {
 	display: none;
 }
 
-li.repo {
-	background-color: #f8f8f8;
-	border: 1px solid #dfdfdf;
-	color: #666;
-	font-size: 13px;
-	margin: 14px;
-	width: 325px;
+li.repo .icon {
+	margin: 10px 0px 10px 10px;
+	height: 70px;
+	display: inline-block;
 }
-
-li.repo>div {
-	margin: 15px;
-}
-
-li.repo .vol img {
+li.repo .icon img {
+	background-image: url("../img/icons.png");
+	background-position: -107px -1px;
 	width: 64px;
 	height: 64px;
 }
 
-li.repo .name {
-	width: 210px;
+
+li.repo .content {
 	float: right;
+	width: 290px;
+	padding: 10px;
 }
-li.repo .name p {
-	margin-top: 5px;
+
+li.repo .content h2 {
+	line-height: 28px;
 }
 
-
-
+li.repo .enter {
+	color: #CE7536;
+}

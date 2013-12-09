@@ -30,15 +30,17 @@ public class ContentStoreDAOImpl implements ContentStoreDAO {
 		} else {
 			DBObject dbo = dataSource.getCollection("store").findOne(new BasicDBObject("name", name));
 			
-			String storeUrl = (String)dbo.get("url");
-			
-			return contentStoreFactory.getContentStore(storeUrl);
+			if (dbo==null) {
+				return contentStoreFactory.getDefaultContentStore();
+			} else {
+				String storeUrl = (String)dbo.get("url");
+				return contentStoreFactory.initContentStore(storeUrl);
+			}
 		}
 	}
 
 	@Override
 	public void addContentStore(String name, String contentStoreUrl) {
-	
 		DBObject dbo = new BasicDBObject();
 		dbo.put("name", name);
 		dbo.put("url", contentStoreUrl);

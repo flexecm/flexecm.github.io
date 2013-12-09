@@ -5,13 +5,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.baidu.inf.iis.bcs.utils.Mimetypes;
 import com.ever365.ecm.authority.AuthenticationUtil;
 import com.ever365.ecm.clipboard.ClipboardDAO;
 import com.ever365.ecm.content.ContentDAO;
+import com.ever365.ecm.content.ContentData;
 import com.ever365.ecm.content.ContentStore;
 import com.ever365.ecm.content.ContentStoreDAO;
 import com.ever365.ecm.entity.Entity;
@@ -35,6 +38,8 @@ import com.ever365.utils.UUID;
  */
 
 public class RepositoryService {
+
+	public static final String NO_EXT = "nv";
 
 	private static Logger logger = Logger.getLogger(RepositoryService.class.getName());
 	
@@ -85,6 +90,8 @@ public class RepositoryService {
 		// TODO Auto-generated method stub
 	}
 	
+	
+	
 	@RestService(uri="/repository/list/all", method="GET", runAsAdmin=true)
 	public List<Map<String, Object>> getAllRepositories() {
 		List<Repository> allrepo = repositoryDAO.getRepositories();
@@ -110,7 +117,7 @@ public class RepositoryService {
 			result.add(m);
 		}
 		*/
-		List<Repository> list = repositoryDAO.getRepositories("pub");
+		List<Repository> list = repositoryDAO.getRepositories(Repository.PROTOCOL_PUB);
 		
 		for (Repository repository : list) {
 			Map<String, Object> m = getRepositoryInfo(repository);
@@ -129,8 +136,16 @@ public class RepositoryService {
 		return m;
 	}
 	
-	@RestService(uri="/repository/drop", method="POST")
-	public void dropRepository(@RestParam(value="repository")String repository) {
+	@RestService(uri="/repository/add", method="POST")
+	public void addRepository(@RestParam(value="repository")String repository,
+			@RestParam(value="desc")String desc
+			) {
+		if (!permissionService.isAdmin(AuthenticationUtil.getCurrentUser())) 
+			throw new HttpStatusException(HttpStatus.FORBIDDEN);
+		
+		repositoryDAO.addRepository(repository, AuthenticationUtil.getCurrentUser(), null);
+		
+		Repository repo = repositoryDAO.getRepository(repository, false);
 		
 	}
 	
@@ -216,7 +231,7 @@ public class RepositoryService {
 	}
 
 	@RestService(uri="/file/upload", method="POST", multipart=true)
-	public Map<String, Object> addFile(@RestParam(value="id") String parentEntityId, @RestParam(value="name")String name,
+	public Map<String, Object> uploadFile(@RestParam(value="id") String parentEntityId, @RestParam(value="name")String name,
 			@RestParam(value="file")InputStream is, @RestParam(value="size")Long size
 			) {
 		
@@ -235,19 +250,22 @@ public class RepositoryService {
 		String childNodeName = name;
 		
 		Map<QName, Serializable> specialProperties = new HashMap<QName, Serializable>();
+		if (childNodeName.lastIndexOf(".")>-1) {
+			specialProperties.put(Model.PROP_FILE_EXT, childNodeName.substring(childNodeName.lastIndexOf(".")+1));
+		} else {
+			specialProperties.put(Model.PROP_FILE_EXT, NO_EXT);
+		}
 		
-		ContentStore contentStore = contentStoreDAO.getContentStore(repo.getStoreName());
+		
+		ContentStore contentStore = contentStoreDAO.getContentStore(repo.toString());
 		
 		String url = contentStore.putContent(is, size);
 		
-		String contentDataId = contentDAO.createContentData(url, null, size, null);
+		String contentDataId = contentDAO.createContentData(url, Mimetypes.getInstance().getMimetype((String)specialProperties.get(Model.PROP_FILE_EXT)), size, "UTF-8");
 		
 		specialProperties.put(Model.PROP_FILE_URL, contentDataId);
 		specialProperties.put(Model.PROP_FILE_SIZE, size);
 		
-		if (childNodeName.lastIndexOf(".")>-1) {
-			specialProperties.put(Model.PROP_FILE_EXT, childNodeName.substring(childNodeName.lastIndexOf(".")+1));
-		}
 		
 		Entity entity = entityDAO.addEntity(repo, parentEntityId, Model.FS_CONTAINS, 
 				null, Model.TYPE_FILE, childNodeName, null, specialProperties);
@@ -540,6 +558,7 @@ public class RepositoryService {
 		
 		for (Entity entity : sources) {
 			Map<String, Object> info = getEntityInfo(entity, 5);
+			info.put("permissions", getPermissions(entity.getId()));
 			shares.add(info);
 		}
 		return shares;
@@ -549,6 +568,18 @@ public class RepositoryService {
 		Map<String, Object> info = entity.toMap();
 		List<Entity> childrens = entityDAO.listChild(entity, 0, limit);
 		
+		LinkedList<Entity> ancestors = entityDAO.getAncestor(entity);
+		
+		LinkedList<String> paths = new LinkedList<String>();
+		LinkedList<String> ids = new LinkedList<String>();
+		
+		for (Entity ancestor : ancestors) {
+			paths.add(ancestor.getName());
+			ids.add(ancestor.getId());
+		}
+		
+		info.put("ancpath", paths);
+		info.put("ancid", ids);
 		List<Map<String, Object>> details = new ArrayList<Map<String,Object>>();
 		for (Entity child : childrens) {
 			details.add(child.toMap());
@@ -573,15 +604,12 @@ public class RepositoryService {
 	
 	@RestService(uri="/share/list", method="GET")
 	public Map<String, Object> getPermissions(@RestParam(value="id", required=true)String id) {
-		
-		Map<String, Object> pinfo = new HashMap<String, Object>();
-		
 		Entity entity = entityDAO.getEntityById(id);
-		
+		Map<String, Object> pinfo = new HashMap<String, Object>();
 		List<ACE> permissions = permissionService.getAllSetPermissions(entity, true);
 		
 		pinfo.put("inh", permissionService.getInheritParentPermissions(entity));
-
+		
 		List<Map<String, Object>> inhlist = new ArrayList<Map<String,Object>>();
 		
 		List<Map<String, Object>> curlist = new ArrayList<Map<String,Object>>();
@@ -600,18 +628,11 @@ public class RepositoryService {
 				inhlist.add(info);
 			}
 		}
-
+		
 		pinfo.put("curlist", curlist);
 		pinfo.put("inhlist", inhlist);
 		return pinfo;
 	}
-	
-	
-	@RestService(uri="/permission/list/mine", method="GET")
-	public void getMyPermissions(@RestParam(value="id")String id) {
-		
-	}
-	
 	@RestService(uri="/file/clipboard/copyAll", method="POST")
 	public void copyFromClipboard(@RestParam(value="target", required=true)String target) {
 		List<Map<String, Object>> clips = clipboardDAO.list();
@@ -625,6 +646,8 @@ public class RepositoryService {
 			}
 		}
 	}
+	
+	
 	
 	@RestService(uri="/file/copy", method="POST")
 	public void copy(@RestParam(value="srcs",required=true) List<String> srcPaths, @RestParam(value="target")String targetId
@@ -646,6 +669,37 @@ public class RepositoryService {
 		}
 	}
 	
-	
+	@RestService(uri="/file/download", method="GET")
+	public ContentData getContentData(@RestParam(value="id", required=true)String id) {
+		
+		Entity entity = entityDAO.getEntityById(id);
+		
+		if (entity==null) {
+			throw new HttpStatusException(HttpStatus.NOT_FOUND);
+		}
+		
+		ContentStore contentStore = contentStoreDAO.getContentStore(entity.getRepository().toString());
+		
+		
+		String fileUrl = entity.getPropertyStr(Model.PROP_FILE_URL);
+		
+		ContentData contentData = contentDAO.getContentData(fileUrl);
+		
+		if (contentData==null) {
+			throw new HttpStatusException(HttpStatus.FAILED_DEPENDENCY);
+		}
+		
+		
+		InputStream is = contentStore.getContentData(contentData.getContentUrl());
+		
+		if (is!=null) {
+			contentData.setFileName(entity.getName());
+			contentData.setInputStream(is);
+			return contentData;
+		} else {
+			throw new HttpStatusException(HttpStatus.INSUFFICIENT_STORAGE);
+		}
+		
+	}
 	
 }

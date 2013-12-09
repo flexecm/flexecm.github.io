@@ -16,6 +16,7 @@
 	            <ref bean="rest.permission"/>
 	            <ref bean="rest.repository"/>
 	            <ref bean="rest.faceted"/>
+	            <ref bean="rest.config"/>
 	        </list>
 	    </property>
 	</bean>
@@ -30,12 +31,16 @@
 	 <bean id="rest.person" class="com.ever365.ecm.authority.PersonService">
 	    <property name="entityDAO" ref="entityDao"></property>
 	    <property name="repositoryDAO" ref="repositoryDao"></property>
-	    <property name="adminPassword"><value>123456</value></property>
-	    <property name="allUser"><value>所有用户</value></property>
 	</bean>
 	
 	<bean id="rest.faceted" class="com.ever365.ecm.faceted.FacetedService">
 		<property name="facetedDAO" ref="facetedDao"></property>
+		<property name="entityDAO" ref="entityDao"></property>
+	</bean>
+	
+	<bean id="rest.config" class="com.ever365.ecm.service.ConfigService">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="personService" ref="rest.person"></property>
 		<property name="entityDAO" ref="entityDao"></property>
 	</bean>
 	
@@ -55,9 +60,7 @@
 	</bean>
 	 	
 	<bean id="contentStoreFactory" class="com.ever365.ecm.content.ContentStoreFactory">
-		<property name="defaultStoreUrl">
-			<value>${file.root.dir}</value>
-		</property>
+		<property name="personService" ref="rest.person"></property>
 	</bean>
 	 	
 	<bean id="repositoryLogger" class="com.ever365.ecm.service.listener.LogListener">
