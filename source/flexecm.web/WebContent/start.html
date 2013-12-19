@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>开始使用flexecm</title>
+
+<style type="text/css">
+html, body, div, ul, ol, li, form, input, button, textarea, select {
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Microsoft YaHei', Tahoma, Aria, \5b8b\4f53,sans-serif;
+}
+
+
+body {
+	background-color: #3790CE;
+	
+}
+
+.field input {
+	width: 200px;
+	border: 1px solid #e5e5e5;
+	background: #f5f5f5;
+	padding: 5px;
+}
+
+.wrap {
+	float: left;
+	width: 600px;
+	height: 400px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -250px 0 0 -300px;
+	box-shadow: 0 0 7px rgba(0,0,0,0.20);
+	clear: both;
+	background: #fff;
+}
+
+
+.content {
+	float: left;
+	height: 280px;
+	width: 400px;
+	padding: 30px 0;
+	overflow: hidden;
+}
+
+.content form {
+	margin-top: 40px;
+}
+
+h2 {
+	font-size: 32px;
+	margin: 0;
+	font-weight: 100;
+	padding: 0 15px;
+	border-left: 15px solid #b4c885;
+	display: inline;
+}
+
+.content ul {
+	margin-left: 20px;
+	height: 40px;
+}
+.content ul li {
+	list-style: none;
+}
+.content ul li.label {
+	width: 99px;
+	float:left;
+	text-align: right;
+	font-size: 16px;
+	padding-right: 5px;
+	padding-top: 3px;
+}
+
+.content ul li.field {
+	float:left;
+	width: 260px;
+}
+
+button {
+	cursor: pointer;
+	float: left;
+	border: 0px;
+	background: #71BC22;
+	color: #fff;
+	padding:6px 5px;
+	width: 100px;
+	margin-left: 125px;
+	text-align: center;
+	font-size: 18px;
+	letter-spacing: 8px;
+	text-indent: 10px;
+}
+
+.sider {
+	padding: 30px 20px;
+	width: 155px;
+	float: right;
+	height: 340px;
+	background: #f0f0f0;
+	border-left: 1px solid #e5e5e5;
+}
+
+
+.intro {
+	height: 59px;
+	margin: 0;
+	border-top: 1px solid #e5e5e5;
+	line-height: 50px;
+	float: left;
+	width: 360px;
+	margin: 0 20px;
+	display: inline;
+}
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+	
+	<div class="content">
+		<h2>开始使用</h2>
+		
+			<ul>
+				<li class="label">账户：</li>
+				<li class="field">
+					<input name="name">
+				</li>
+			</ul>
+			<ul>
+				<li class="label">密码：</li>
+				<li class="field">
+					 <input name="password" type="password">
+				</li>
+			</ul>
+			
+			<div class="referto">
+			<button type="submit" tabindex="1">登录</button>
+			</div>
+		</form>
+	</div>
+	<div class="sider">
+	
+		<div class="logo" style="margin-left: -10px; margin-top: 120px;">
+			<img src="img/logo-blue.png">
+		</div>
+	</div>
+	
+	<div class="intro">
+		访问<a href="http://flexecm.github.io" target="_blank">flexecm.github.io</a>了解更多
+	</div>
+</div>
+
+</body>
+</html>

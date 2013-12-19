@@ -1,0 +1,59 @@
+----- 2013/9/10 15:52:34：任务 'Eclipse To Tomcat WebApp'：计算机 'WIN-28BOTBEHKJ5' 上的分析操作已由 User 所启动 (GoodSync v 8.4.2.2 on Windows 7) -----
+Eclipse To Tomcat WebApp: D:\3.4workspace\FlexECM\WebRoot\css =forced-PropDels=> D:\apache-tomcat-6.0.37\webapps\ROOT, SavePrevVers=30d, TmpDest, EstReq, CopyLocked, FileLinksDrill, CaseSens, Reconnect=3
+已排除 licens*.rfo|cache.rfo|mru.rfo|mpp*.rfo|RoboForm Online Account.rfp|/System Volume Information|Thumbs.db|.DS_Store 
+左侧: 读取状态文件 D:\3.4workspace\FlexECM\WebRoot\css\_gsdata_\_file_state._gs
+左侧: State file does not exist: D:\3.4workspace\FlexECM\WebRoot\css\_gsdata_\_file_state._gs
+左侧: No State File found, New State will be built
+左侧：文件： 2 (已排除 )。文件夹：  (已排除 )。 D:\ NTFS, 可用空间：148 GB，总计空间：259 GB
+右侧: 读取状态文件 D:\apache-tomcat-6.0.37\webapps\ROOT\_gsdata_\_file_state._gs
+右侧: State file does not exist: D:\apache-tomcat-6.0.37\webapps\ROOT\_gsdata_\_file_state._gs
+右侧: No State File found, New State will be built
+右侧：文件： 50 (已排除 )。文件夹： 9 (已排除 )。 D:\ NTFS, 可用空间：148 GB，总计空间：259 GB
+同步需要磁盘 D: 上的空间应为 336 KB，目前为 148 GB
+同步需要磁盘 D: 上的空间应为 336 KB，目前为 148 GB
+变更：61， 冲突：， 复制时间：， 复制状态：， 错误： 
+Left to Right: Copy File: 2 Delete File: 59 
+----- 2013/9/10 15:52:34：分析已结束。 历时 00:00:00， 速度： Many 个文件/秒 -----
+
+===== 2013/9/10 15:54:09：任务 'Eclipse To Tomcat WebApp'：同步已被 User 所启动，位于计算机 'WIN-28BOTBEHKJ5' =====
+Eclipse To Tomcat WebApp: D:\3.4workspace\FlexECM\WebRoot\css =forced-PropDels=> D:\apache-tomcat-6.0.37\webapps\ROOT, SavePrevVers=30d, TmpDest, EstReq, CopyLocked, FileLinksDrill, CaseSens, Reconnect=3
+Locking folder D:\3.4workspace\FlexECM\WebRoot\css for write
+Locking folder D:\apache-tomcat-6.0.37\webapps\ROOT for write
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\css\as.css'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\css\common.css'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\html5\home.html'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\html5\testPost.html'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\html5\users.html'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\btn_icon.gif'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\file_add.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\folder_open_add2.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\icons.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\list_bullets.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\repository.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\separator.gif'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\spacer.gif'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\sprite_list_icon.gif'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\trash_canfull.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\img\window_app_list.png'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\home.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\jquery-1.7.2.min.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\plupload.full.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\plupload.html4.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\plupload.html5.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\plupload.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\js\xbreadcrumbs.js'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\index.jsp'
+删除文件 'D:\apache-tomcat-6.0.37\webapps\ROOT\login.html'
+删除文件夹 'D:\apache-tomcat-6.0.37\webapps\ROOT\js'
+删除文件夹 'D:\apache-tomcat-6.0.37\webapps\ROOT\img'
+删除文件夹 'D:\apache-tomcat-6.0.37\webapps\ROOT\html5'
+删除文件夹 'D:\apache-tomcat-6.0.37\webapps\ROOT\css'
+新建复制 'D:\3.4workspace\FlexECM\WebRoot\css\as.css' -> 'D:\apache-tomcat-6.0.37\webapps\ROOT\as.css'
+新建复制 'D:\3.4workspace\FlexECM\WebRoot\css\common.css' -> 'D:\apache-tomcat-6.0.37\webapps\ROOT\common.css'
+保存状态文件 D:\3.4workspace\FlexECM\WebRoot\css\_gsdata_\_file_state._gs
+保存状态文件 D:\apache-tomcat-6.0.37\webapps\ROOT\_gsdata_\_file_state._gs
+Delete lock file D:\3.4workspace\FlexECM\WebRoot\css\_gsdata_\lock.gsl
+Delete lock file D:\apache-tomcat-6.0.37\webapps\ROOT\_gsdata_\lock.gsl
+项目同步未必： 31，错误： 
+===== 2013/9/10 15:54:09：同步完毕。时间：00:00:01，速度：  =====
+

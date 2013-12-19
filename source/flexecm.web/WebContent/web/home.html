@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>我的首页</title>
+<link rel="StyleSheet" href="../css/common.css"  type="text/css">
+
+<script type="text/javascript" language="javascript" src="../js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" language="javascript" src="../js/util.js"></script>
+<script type="text/javascript" language="javascript" src="../js/home.js"></script>
+<script type="text/javascript" language="javascript" src="../js/plupload.js"></script>
+</head>
+<body>
+
+<div id="msg">
+
+</div>
+
+<div class="head">
+	<div class="logo">
+	</div>
+
+	<div class="oper">
+		<a class="head-btn iconed" select="*" onclick="addFolderDialog();">
+			<img src="../img/spacer.gif" class="ico-folder-add small"/>
+			创建目录
+		</a>
+		<a class="head-btn iconed" id="pickFile" select="*" role="Contributor">
+			<img src="../img/spacer.gif" class="ico-upload small"/>
+			上传文件
+		</a>
+		<a class="head-btn iconed" select="=1" onclick="share();">
+			<img src="../img/spacer.gif"  class="ico-share small"/>
+			共享
+		</a>
+		
+		<a class="head-btn" select=">0" onclick="move();">
+			<img src="../img/spacer.gif" class="ico-move small"/>
+			移动
+		</a>
+		<a class="head-btn" select=">0" onclick="copy();">
+			<img src="../img/spacer.gif" class="ico-copy small"/>
+			复制
+		</a>
+		<a class="head-btn" select=">0" onclick="faceted();">
+			<img src="../img/spacer.gif" class="ico-tag small"/>
+			标记
+		</a>
+		
+		<a class="head-btn" select="=1" onclick="rename();">
+			<img src="../img/spacer.gif" class="ico-rename small"/>
+			改名
+		</a>
+		
+		<a class="head-btn" select=">0" onclick="remove();">
+			<img src="../img/spacer.gif" class="ico-delete small"/>
+			删除
+		</a>
+		
+	</div>
+	<div class="links fr">
+		<a onclick="logout();">退出</a> 
+		</div>	<!-- 
+	<div id="progress-bar">
+		<span class="message"></span>
+		<div class="detail">
+			<ul>
+				<li class="upload-template">
+					 <div class="percent">
+				      		&nbsp;
+				    </div>
+				    <div class="text">
+				    	这是文件名 最长是10... (234K/s)
+				    </div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	 -->
+</div>
+
+
+<div class="base">
+	<div class="left">
+		<ul class="navs">
+			<li onclick="pageMyRepo();"><span class="repoico home"></span>我的文件</li>
+			<li onclick="pagePublic();"><span class="repoico public"></span>公用文件库</li>
+			<li onclick="pageShares();"><span class="repoico share"></span>共享文件</li>
+			<li onclick="pageFaceted();"><span class="repoico facet"></span>文件分类</li>
+		</ul>
+	</div>
+	<div class="center">
+		
+		<div id="repo-list">
+			<!-- 
+			<div class="title">私有文件库<a class="fr contentbtn" onclick="newRepo();">创建</a></div>
+			 -->
+			
+			<ul id="my-repos">
+				<li class="snapshot repo template">
+					<span class="icon">
+						<img src="../img/spacer.gif" class="user-repo">
+					</span>
+					<div class="content">
+						<h2>我的资源库</h2>
+						<p>存放您的私人文件</p>
+						
+					</div>
+					<div class="foot">
+					
+						<div class="line16">
+							<span class="time fr"></span>
+							<a class="enter" onclick="openRepo(null);">进入</a>
+						</div>
+					</div>
+				</li>
+				
+			</ul>
+			
+			<div class="title">公用文件夹</div>
+			
+			<ul id="pub-repos">
+				
+			</ul>
+		</div>
+		
+		<div id="share-list" class="shares">
+			<div class="title">共享给我的文件</div>
+			<ul id="share-me" >
+			</ul>
+			<ul>
+				<li class="share template">
+					<div class="header">
+						<a class="title" >
+							<img src="../img/spacer.gif" class="ico-upload small"/><span></span>
+						</a>
+					</div>
+					<div class="list">
+						<ul>
+							
+						</ul>
+					</div>
+					
+					<div class="foot">
+						<div class="line16">
+							<span class="time fr"></span>
+							<a class="owner">
+							</a>
+						</div>
+					</div>
+				</li>
+				
+				<li class="template sharesub">
+					<img src="../img/spacer.gif" class="ico-upload small"/><span></span>
+				</li>
+			</ul>
+		</div>
+		
+		<div id="listing">
+			<div id="browse-location">
+				<ul id="fpath" class="xbreadcrumbs icon-action">
+					<li class="view"><a href="#" onclick="listTrashFiles();"><img src="../img/spacer.gif" class="ico-trash small" ><span>回收站</span></a></li>
+					<li class="view"><a href="#" onclick="listUploading();"><img src="../img/spacer.gif" class="ico-uploading small" ><span>传输列表</span></a></li>
+				</ul>
+			</div>
+						
+			<ul class="files list">
+				<li class="title">
+					<div class="check col" onclick="selectAll();">
+						<label></label>
+					</div>
+					<!-- 
+					<div class="ft col" >
+						<a href="javascript:void(0);" class="linkto" onclick="parent();">
+							<span class="name">返回上层目录</span></a>
+					</div>
+					 -->
+				</li> 
+				<li class="file-template">
+					<div class="check col">
+						<label></label>
+					</div>
+					<div class="ft col">
+						<a href="javascript:void(0);" class="linkto">
+							<p class="ico">
+								<span class="slot"></span>
+							</p>
+							<span class="name">wer</span></a>
+					</div>
+					<div class="fs col"></div>
+					<div class="fm col"></div>
+				</li>
+			</ul>
+		</div>
+		<div id="faceted-view">
+			<div id="" class="shadow-box">
+				<div class="title">
+					文件筛选
+				</div>
+				<dl class="faceted-filter">
+					<dt>文件类型:</dt>
+					<dd>
+						<div class="default current">不限</div>
+						<div filter="ext=doc,xml,docx,xls,pdf,ppt,pot,potx,rtf">文档</div>
+						<div filter="ext=mp3,wma,mid">音频</div>
+						<div filter="ext=rm,rmvb,wmv,avi,mp4">视频</div>
+						<div filter="ext=png,gif,bmp,jpg,jpeg">图片</div>
+						<div filter="ext=exe">软件</div>
+						<div filter="ext=rar,zip,cab,rpm,7z">安装包</div>
+					</dd>
+				</dl>
+					
+				<dl class="faceted-filter">
+					<dt>文件大小:</dt>
+					<dd>
+						<div class="default current">不限</div>
+						<div filter="size<100K">小（&lt;100K）</div>
+						<div filter="size>100K;size<1M">中（100K-1M）</div>
+						<div filter="size>1M;size<100M">大（1M-100M）</div>
+						<div filter="size>100M;size<2G">特大（100M-2G）</div>
+						<div filter="size>2G">巨大(&gt;2G)</div>
+					</dd>
+				</dl>
+				
+				<dl class="faceted-filter">
+					<dt>创建者:</dt>
+					<dd>
+						<div class="default current">不限</div>
+						
+					</dd>
+				</dl>
+				<dl class="faceted-filter">
+					<dt>文件标签:</dt>
+					<dd>
+						<div class="default current">不限</div>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="shadow-box">
+				<ul class="files list">
+					<li class="current template">
+					<!-- 
+						<div class="check col">
+							<label></label>
+						</div>
+					 -->
+						<div class="ft col">
+							<a href="javascript:void(0);" class="linkto">
+								<p class="ico">
+									<span class="slot"></span>
+								</p>
+								<span class="name">经典歌曲</span></a>
+						</div>
+						<div class="fs col">admin<br>undefined创建</div>
+						<div class="fm col">328 MB<br>41子文件夹，63子文件</div>
+					</li>
+				
+				</ul>
+			</div>
+		</div>
+		
+		<div id="repo-edit-view">
+			<div class="shadow-box new">
+				<div class="title">
+					文件库基本信息
+				</div>
+				
+				<dl class="faceted-filter">
+					<dt>名称:</dt>
+					<dd>
+						<input type="text" id="repo-name" class="w360">
+					</dd>
+				</dl>
+				
+				<dl class="faceted-filter">
+					<dt>描述:</dt>
+					<dd>
+						<textarea class="w360 h120"></textarea>
+					</dd>
+				</dl>
+				<dl class="faceted-filter">
+					<dt></dt>
+					<dd>
+						<a class="contentbtn" onclick="confirmRepoName();">确认保存</a>
+					</dd>
+				</dl>
+			</div>
+			
+			<div class="shadow-box edit" id="repo-danger-zone">
+				<div class="title" style="background-color: #df3e3e; color: white; text-shadow: 0 -1px 0 #900;">
+					<h3>Danger Zone™</h3>
+				</div>
+				
+				<dl class="faceted-filter">
+					<dt>删除文件库</dt>
+					<dd>
+						文件库删除后无法恢复。删除前请仔细考虑
+						<a class="contentbtn" onclick="removeRepo();">确认删除</a>
+					</dd>
+				</dl>
+			</div>
+			
+		</div>
+		
+		<div id="loadingMask" style="/* display: none; */ /* opacity: 0; */"><div></div><span>加载文件列表中...</span></div>
+		
+	</div>
+
+	<div class="right" >
+	
+		<!-- 
+		<div id="clipboard">
+			<div class="title">
+				<div class="close" onclick="closeRight();">
+					<img src="../img/pinClose.png" id="pinImg">
+				</div>
+				<span>文件剪贴板</span>
+				<a onclick="moveAll();">全部复制</a>
+				<a onclick="copyAll();">全部移动</a>
+				<a onclick="clearClipboard();">清空</a>
+			</div>
+			
+			<div>
+				<ul id="cblist">
+					<li class="hidden cbitemTemplate">
+						<p class="ico"></p> 
+						<div class="content">
+							<a class="filename"></a>
+							<p>
+								<span class="btns">
+									<a class="mv">移动</a>或
+									<a class="cp">复制</a>到当前目录
+								</span>
+								<span class="infos hidden">
+								</span>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		 -->
+		 <!-- 
+		<div id="uploading">
+			<div class="title">
+				<div class="close" onclick="closeRight('uploading');">
+					<img src="../img/pinClose.png" id="pinImg">
+				</div>
+				<span>上传进度</span>
+				<a onclick="moveAllToCurrent();">全部取消</a>
+			</div>
+		
+			<div>
+				<ul id="upload-list">
+					<li class="cbitem hidden uploadItemTemplate">
+						<p class="ico"></p> 
+						<div class="content">
+							<a class="filename">pyno01</a>
+							<p class="btns">
+								大小 200K, 已上传10%
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+		 -->
+		<div id="trash">
+			<div class="title">
+				<div class="close" onclick="closeRight('trash');">
+					<img src="../img/pinClose.png" id="pinImg">
+				</div>
+				<span>文件回收站</span>
+				<a href="javascript:void(0)" onclick="recoverAll();">全部还原</a>
+				<a href="javascript:void(0)" onclick="clearTrash();">清空</a>
+			</div>
+			<div>
+				<ul id="trashlist">
+					<li class="cbitem hidden trashitemTemplate">
+						<p class="ico"></p> 
+						<div class="content">
+							<a class="filename">pyno01</a>
+							<p></p>
+						</div>
+						<div class="btns">
+							<a class="recover">还原</a><br>
+							<a class="remove">永久删除</a>
+						</div>
+					</li>
+				</ul>
+			</div>			
+		</div>
+	</div>
+</div>
+
+<div id="upload-dialog" class="notifybox">
+	<div class="u-head">
+		<span class="title">上传列表</span>
+		<span class="operation">
+			<a class="min">
+				<img src="../img/spacer.gif">
+			</a>
+			<a class="close">
+				<img src="../img/spacer.gif">
+			</a>
+			<a class="max">
+				<img src="../img/spacer.gif">
+			</a>
+		</span>
+	</div>
+	
+	<div class="u-body">
+		<ul id="upload-list">
+			<li class="item template">
+				<div class="progress" style="width: 10%;"></div>
+				<div class="icon"></div>
+				<div class="name"></div>
+				<div class="size"></div>
+				<div class="status"></div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div id="copy-move-dialog" class="dialog">
+	<div class="title">移动到</div>
+	
+	<div class="wrapper">
+		<ul class="tree" id="copyToUL">
+		</ul>
+	</div>
+	
+	<div class="buttons">
+		<a class="button left" href="javascript:void(0)" onclick="dialogNewFolder();">新建文件夹</a>
+		
+		<a class="button right" href="javascript:void(0)" onclick="closeDialog();">取消</a>
+		
+		<a class="button blue right" href="javascript:void(0)" onclick="confirmCopyOrMove();">确定</a>
+	</div>
+</div>
+
+<div id="faceted-dialog" class="dialog">
+	<div class="title">标记为</div>
+	
+	<div class="filter">
+		<input type="text" class="search-input" id="shareToFilter" placeholder="查找分类...">
+	</div>
+	<ul class="checktable-list h240">
+	</ul>
+	
+	<div class="buttons icon-action">
+		<a class="button left" onclick="newFaceted();">新增标签</a>			
+		<a class="button right cancel" onclick="closeDialog();">关闭</a>
+		<a class="button blue right confirm" onclick="confirmFacetedSet();" href="javascript:void(0)">确定</a>
+	</div>
+</div>
+
+<div id="new-faceted" class="dialog">
+	<div class="title">新增标签</div>
+	<div class="filter">
+			<input type="text" class="search-input" id="newFacetedField" placeholder="输入标签名">
+	</div>
+		
+		<!-- 
+	<div class="pad5">
+		<input type="checkbox" id="check-under" value="1" ><label for="check-under">在以下标签下嵌套标签：</label>
+	</div>
+	<div class="pad5">	
+		<select id="facetedParentField" class="pad5" style="width: 380px; ">
+		</select>
+	</div>
+			 -->
+	<div class="buttons icon-action">
+		<a class="button right cancel" onclick="closeDialog();">关闭</a>
+		<a class="button blue right confirm" onclick="confirmAddFaceted();" href="javascript:void(0)">确定</a>
+	</div>
+</div>
+
+<div id="share-dialog" class="dialog">
+	<div class="title">共享列表</div>
+	
+	<div class="wrapper">
+		<div id="shared-usr">
+			<UL class="inherited icon-action">
+				<li class="template">
+					<img src="../img/spacer.gif" class="ico-lock small"/>
+					<span class="name"></span>
+					<div class="right permission">
+						读者
+					</div>  
+				</li>
+			</UL>
+			
+			<ul class="current icon-action">
+				<li class="template">
+					<img src="../img/spacer.gif" class="ico-hor small"/>
+					<span class="name">FanchanglongTmi</span>  
+					<select class="permission">
+						<option value="Reader">读者</option>
+						<option value="Contributor">提交者</option>
+						<option value="Editor">编辑者</option>
+						<option value="Coordinator">管理者</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+		
+		<div id="selectable-usr">
+			<div class="filter">
+				<input type="text" class="search-input" id="shareToFilter" placeholder="查找用户……">
+			</div>
+		
+			<div id="auth-tree">
+				<ul>
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="buttons icon-action">
+		<label class="checkbox" onclick="switchInherit();" id="share-inherit"></label> 继承父目录的权限
+		<a class="button right cancel" onclick="closeDialog();">关闭</a>
+		<a class="button blue right confirm" onclick="confirmShare();" href="javascript:void(0)">确定</a>
+		
+	</div>
+</div>
+
+<div class="dialog" id="pendding-dialog">
+	<div class="title">请稍候</div>
+	<div class="content">
+		
+	</div>
+</div>
+
+
+<div class="dialog" id="alert-dialog">
+	<div class="title">请注意</div>
+	<div class="content">
+		
+	</div>
+	<div class="buttons">
+		<a class="button blue right confirm" onclick="closeDialog();">确定</a>
+	</div>
+</div>
+
+
+<div class="dialog" id="name-dialog">
+	<div class="title">输入名称</div>
+	<div class="content">
+		<input type="text" class="name"/>
+	</div>
+	<div class="buttons">
+		<span class="msg"></span>
+		<a class="button right cancel" onclick="closeDialog();">取消</a>
+		<a class="button blue right confirm" onclick="confirmName();">确定</a>
+	</div>
+</div>
+
+
+<div class="hide-bg">
+</div>
+
+</body>
+</html>
